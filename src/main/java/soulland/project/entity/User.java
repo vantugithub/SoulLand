@@ -59,7 +59,7 @@ public class User extends DateAudit {
 	private String phone;
 	
 	@Column
-	private boolean active;
+	private int active;
 
 	
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -149,11 +149,11 @@ public class User extends DateAudit {
 		this.phone = phone;
 	}
 
-	public boolean isActive() {
+	public int isActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(int active) {
 		this.active = active;
 	}
 
@@ -199,7 +199,7 @@ public class User extends DateAudit {
     }
 
 	public User(Long id, String lastName, String firstName, String username, String password, String email,
-			String address, String image, String phone, boolean active, Set<Role> roles, Set<Memorials> memorials,
+			String address, String image, String phone, int active, Set<Role> roles, Set<Memorials> memorials,
 			Set<Participants> participants, Set<Contributions> contributions) {
 		this.id = id;
 		this.lastName = lastName;
