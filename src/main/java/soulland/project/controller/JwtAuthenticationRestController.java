@@ -75,7 +75,7 @@ public class JwtAuthenticationRestController {
 
     final String token = jwtTokenUtil.generateToken(userDetails);
     final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
-    return ResponseEntity.ok(new JwtTokenResponse(token, refreshToken, "Bearer"));
+    return ResponseEntity.ok(new JwtTokenResponse(token, refreshToken, userDetails.getUsername(),"Bearer"));
   }
 
   @RequestMapping(value = "/api/auth/refresh", method = RequestMethod.GET)
@@ -90,7 +90,7 @@ public class JwtAuthenticationRestController {
     	UserDetails userDetails = jwtInMemoryUserDetailsService.loadUserByUsername(username);
     	final String token = jwtTokenUtil.generateToken(userDetails);
         final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
-        return ResponseEntity.ok(new JwtTokenResponse(token, refreshToken,"Bearer"));
+        return ResponseEntity.ok(new JwtTokenResponse(token, refreshToken,userDetails.getUsername(),"Bearer"));
     }
     else
     {

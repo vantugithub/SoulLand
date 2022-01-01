@@ -4,6 +4,8 @@ public class JwtTokenResponse {
 
 	private String token;
 	private String refreshToken;
+	private String username;
+	
     private String typeToken;
 	public String getToken() {
 		return token;
@@ -23,10 +25,18 @@ public class JwtTokenResponse {
 	public void setTypeToken(String typeToken) {
 		this.typeToken = typeToken;
 	}
-	public JwtTokenResponse(String token, String refreshToken, String typeToken) {
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public JwtTokenResponse(String token, String refreshToken, String username, String typeToken) {
 		this.token = token;
 		this.refreshToken = refreshToken;
+		this.username = username;
 		this.typeToken = typeToken;
 	}
+	
   
 }
