@@ -15,13 +15,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import soulland.project.entity.Contributions;
+import soulland.project.entity.Flowers;
 import soulland.project.entity.Memorials;
 import soulland.project.entity.Placetimes;
 import soulland.project.entity.User;
+import soulland.project.repository.ContributionsRepository;
+import soulland.project.repository.FlowersRepository;
 import soulland.project.repository.MemorialsRepository;
 import soulland.project.repository.PlacetimesRepository;
 import soulland.project.repository.UserRepository;
+import soulland.project.request.CommentFlowerRquest;
 import soulland.project.request.CreateMemorialForm;
+import soulland.project.response.CommentFlowerResponse;
 import soulland.project.response.MemoHomeResponse;
 import soulland.project.response.PagedResponse;
 import soulland.project.service.MemorialsService;
@@ -38,6 +44,12 @@ public class MemorialsServiceImpl implements MemorialsService{
 	
 	@Autowired
 	private PlacetimesRepository placetimesRepository;
+	
+	@Autowired
+	private ContributionsRepository contributionsRepository;
+	
+	@Autowired
+	private FlowersRepository flowersRepository;
 
 	@Override
 	public Memorials save(CreateMemorialForm memorials,String avatar) {
@@ -81,6 +93,21 @@ public class MemorialsServiceImpl implements MemorialsService{
 		
 		return new PagedResponse<>(postResponses, posts.getNumber(), posts.getSize(), posts.getTotalElements(),
 				posts.getTotalPages(), posts.isLast());
+	}
+
+	@Override
+	public CommentFlowerResponse commentFlowers(CommentFlowerRquest commentFlowerRquest) {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+		Contributions contributions = new Contributions();
+		contributions.setContributionType(1);
+		contributions.setContributionMemorial(memorialsRepository.findById(commentFlowerRquest.getIdMemo()).get());
+		Flowers flowers = flowersRepository.save(new Flowers(commentFlowerRquest.getTextComment()));
+		contributions.setFlower(flowers);
+		contributions.setUserContributions(userRepository.findByUsername(userDetails.getUsername()).get());
+		contributionsRepository.save(contributions);
+		CommentFlowerResponse commentFlowerResponse = new CommentFlowerResponse(userDetails.getUsername(), commentFlowerRquest.getTextComment());
+		return commentFlowerResponse;
 	}
 
 }

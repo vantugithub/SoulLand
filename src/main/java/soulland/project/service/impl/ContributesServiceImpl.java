@@ -69,7 +69,7 @@ public class ContributesServiceImpl implements ContributesService{
 			contributionsResponse.setFullName(user.getFirstName());
 			if(contributions.getContributionType()==1) {
 				Flowers flowers = contributions.getFlower();
-				contributionsResponse.setObject(new FlowerResponse(flowers.getId(),flowers.getMessage()));
+				contributionsResponse.setObject(new FlowerResponse(flowers.getId(),flowers.getMessage(),flowers.getLastUpdatedDate()));
 			}else if(contributions.getContributionType()==2) {
 				Story story = contributions.getStory();
 				contributionsResponse.setObject(new StoryResponse(story.getId(),story.getContent(),story.getImage(),null));

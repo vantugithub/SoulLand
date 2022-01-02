@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.Response;
+
 import soulland.project.entity.Memorials;
+import soulland.project.request.CommentFlowerRquest;
 import soulland.project.request.CreateMemorialForm;
 import soulland.project.request.PlacetimeRequest;
+import soulland.project.response.CommentFlowerResponse;
 import soulland.project.s3.service.AmazonClient;
 import soulland.project.service.MemorialsService;
 import soulland.project.service.PlacetimesService;
@@ -69,6 +73,11 @@ public class UserController {
 	public ResponseEntity savePlacetimes(@Validated @ModelAttribute PlacetimeRequest placetimeRequest) {
 		placetimesService.save(placetimeRequest);
 		return ResponseEntity.ok().body("User updated successfully!");
+	}
+	
+	@PostMapping("/commentflower")
+	public ResponseEntity<CommentFlowerResponse> commentFlower(@ModelAttribute CommentFlowerRquest commentFlowerRquest)  {
+		return ResponseEntity.ok(memorialsService.commentFlowers(commentFlowerRquest));
 	}
 
 	
