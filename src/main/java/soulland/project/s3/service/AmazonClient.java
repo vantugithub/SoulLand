@@ -65,6 +65,7 @@ public class AmazonClient {
 
         String fileUrl = "";
         try {
+        	
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
             UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -74,6 +75,9 @@ public class AmazonClient {
             userService.updateImageProfile(fileName, username);
             
             fileUrl = endpointUrl + "/" + fileName;
+            if(!fileUrl.contains("jpg")) {
+            	fileUrl+=".jpg";
+            }
             uploadFileTos3bucket(fileName, file);
             file.delete();
         } catch (Exception e) {

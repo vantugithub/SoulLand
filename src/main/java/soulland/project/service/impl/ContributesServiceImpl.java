@@ -57,7 +57,11 @@ public class ContributesServiceImpl implements ContributesService{
 		memoResponse.setNickName(placetimes.getNickName());
 		memoResponse.setBirthDate(placetimes.getBirthDate());
 		memoResponse.setDeathDate(placetimes.getDeathDate());
-		memoResponse.setUrlListImage(placetimes.getListImage().split(";"));
+		if(placetimes.getListImage() == null || placetimes.getListImage().isEmpty()) {
+			memoResponse.setUrlListImage(null);
+		}else {
+			memoResponse.setUrlListImage(placetimes.getListImage().split(";"));
+		}
 		
 		List<Contributions> listContributions = memorials.getContributions();
 		List<UserContributionsResponse> list = new ArrayList<UserContributionsResponse>();
