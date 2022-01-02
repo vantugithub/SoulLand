@@ -59,7 +59,7 @@ public class UserController {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/creatememorial", method = RequestMethod.POST)
-	public ResponseEntity createMemorials(@Validated @ModelAttribute CreateMemorialForm createMemorialForm) {
+	public ResponseEntity createMemorials(@ModelAttribute CreateMemorialForm createMemorialForm) {
 		MultipartFile[] fileDatas = createMemorialForm.getFiles();
 			@SuppressWarnings("unused")
 			Memorials memorials = memorialsService.save(createMemorialForm,
