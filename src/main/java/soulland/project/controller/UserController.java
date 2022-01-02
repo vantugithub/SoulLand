@@ -64,7 +64,7 @@ public class UserController {
 			@SuppressWarnings("unused")
 			Memorials memorials = memorialsService.save(createMemorialForm,
 					this.amazonClient.uploadFile(fileDatas[0]));
-	    
+	    System.out.println(createMemorialForm.toString() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	    return ResponseEntity.ok().body("User created successfully!");
 	}
 	

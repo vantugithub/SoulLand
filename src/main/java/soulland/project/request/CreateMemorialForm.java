@@ -1,6 +1,7 @@
 package soulland.project.request;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,6 +69,12 @@ public class CreateMemorialForm implements Serializable {
 		this.biography = biography;
 		this.privacyType = privacyType;
 		this.files = files;
+	}
+	@Override
+	public String toString() {
+		return "CreateMemorialForm [fullName=" + fullName + ", gender=" + gender + ", causeOfDeath=" + causeOfDeath
+				+ ", ralationship=" + ralationship + ", biography=" + biography + ", privacyType=" + privacyType
+				+ ", files=" + Arrays.toString(files) + "]";
 	}
 
 	
