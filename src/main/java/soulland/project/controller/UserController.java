@@ -16,16 +16,19 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.Response;
-
 import soulland.project.entity.Memorials;
 import soulland.project.request.CommentFlowerRquest;
 import soulland.project.request.CreateMemorialForm;
 import soulland.project.request.PlacetimeRequest;
 import soulland.project.response.CommentFlowerResponse;
+import soulland.project.response.DetailMemorials;
+import soulland.project.response.MemoHomeResponse;
+import soulland.project.response.PagedResponse;
 import soulland.project.s3.service.AmazonClient;
+import soulland.project.service.ContributesService;
 import soulland.project.service.MemorialsService;
 import soulland.project.service.PlacetimesService;
+import soulland.project.utils.AppConstants;
 
 
 @RestController
@@ -41,6 +44,9 @@ public class UserController {
 	
 	@Autowired
 	private MemorialsService memorialsService;
+	
+	@Autowired
+	private ContributesService contributesService;
 	
     @Autowired
     UserController(AmazonClient amazonClient) {
@@ -64,7 +70,6 @@ public class UserController {
 			@SuppressWarnings("unused")
 			Memorials memorials = memorialsService.save(createMemorialForm,
 					this.amazonClient.uploadFile(fileDatas[0]));
-	    System.out.println(createMemorialForm.toString() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	    return ResponseEntity.ok().body("User created successfully!");
 	}
 	
@@ -78,6 +83,28 @@ public class UserController {
 	@PostMapping("/commentflower")
 	public ResponseEntity<CommentFlowerResponse> commentFlower(@ModelAttribute CommentFlowerRquest commentFlowerRquest)  {
 		return ResponseEntity.ok(memorialsService.commentFlowers(commentFlowerRquest));
+	}
+	
+	@GetMapping("/posts")
+	public PagedResponse<MemoHomeResponse> fetechPosts(
+			@RequestParam(name = "page", required = false, defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) Integer page,
+			@RequestParam(name = "size", required = false, defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer size
+			) {
+		return memorialsService.findAllByOrderByIdDescAndUser(page, size);
+	}
+	
+	@GetMapping("/posts/{id}")
+	public ResponseEntity<DetailMemorials> fetechById(@RequestParam(name = "id", required = true) long id) {
+		return ResponseEntity.ok(contributesService.fetechById(id));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@PutMapping("/posts/updatememo/{idMemo}")
+	public ResponseEntity updateMemoById(@ModelAttribute CreateMemorialForm createMemorialForm,
+			@RequestParam(name = "id", required =  true) Long id
+			) {
+		memorialsService.updateMemorialsById(createMemorialForm, id);
+		return ResponseEntity.ok().body("User updated successfully!");
 	}
 
 	

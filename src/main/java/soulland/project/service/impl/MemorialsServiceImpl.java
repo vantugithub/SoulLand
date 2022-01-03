@@ -3,6 +3,7 @@ package soulland.project.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Collections;
 
 import javax.transaction.Transactional;
 
@@ -108,6 +109,40 @@ public class MemorialsServiceImpl implements MemorialsService{
 		contributionsRepository.save(contributions);
 		CommentFlowerResponse commentFlowerResponse = new CommentFlowerResponse(userDetails.getUsername(), commentFlowerRquest.getTextComment());
 		return commentFlowerResponse;
+	}
+
+	@Override
+	public PagedResponse<MemoHomeResponse> findAllByOrderByIdDescAndUser(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size,Direction.DESC, "Id");
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+	            .getPrincipal();
+		
+		Page<Memorials> posts =  memorialsRepository.findMemorialsByUser(
+				pageable,
+				userRepository.findByUsername(userDetails.getUsername()).get(
+				));
+		
+		List<MemoHomeResponse> postResponses = new ArrayList<>(posts.getContent().size());
+		
+		for(Memorials memorial : posts) {
+			postResponses.add(new MemoHomeResponse(memorial.getId(),memorial.getAvatar() ,
+					memorial.getCauseOfDeath(), memorial.getFullname(), memorial.getGender(),memorial.getBiology()));
+		}
+		Collections.reverse(postResponses);
+		return new PagedResponse<>(postResponses, posts.getNumber(), posts.getSize(), posts.getTotalElements(),
+				posts.getTotalPages(), posts.isLast());
+	}
+
+	@Override
+	public void updateMemorialsById(CreateMemorialForm createMemorialForm,Long idMemo) {
+		Memorials memorials = memorialsRepository.findById(idMemo).get();
+		memorials.setFullname(createMemorialForm.getFullName());
+		memorials.setGender(createMemorialForm.getGender());
+		memorials.setCauseOfDeath(createMemorialForm.getCauseOfDeath());
+		memorials.setBiology(createMemorialForm.getBiography());
+		memorials.setPrivacyType(createMemorialForm.getPrivacyType());
+		memorialsRepository.save(memorials);
+		
 	}
 
 }

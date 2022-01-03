@@ -19,4 +19,8 @@ public interface MemorialsService {
 	public PagedResponse<MemoHomeResponse> findAllByOrderByIdDescAndPrivacyType(int page,int size,int privacy);
 	
 	public CommentFlowerResponse commentFlowers(CommentFlowerRquest commentFlowerRquest);
+	
+	public PagedResponse<MemoHomeResponse> findAllByOrderByIdDescAndUser(int page,int size);
+	
+	public void updateMemorialsById(CreateMemorialForm createMemorialForm, Long idMemo);
 }

@@ -21,6 +21,7 @@ import soulland.project.repository.MemorialsRepository;
 import soulland.project.repository.PlacetimesRepository;
 import soulland.project.repository.UserRepository;
 import soulland.project.response.AttachmentsResponse;
+import soulland.project.response.DetailMemorials;
 import soulland.project.response.FlowerResponse;
 import soulland.project.response.MemoResponse;
 import soulland.project.response.StoryResponse;
@@ -88,6 +89,31 @@ public class ContributesServiceImpl implements ContributesService{
 		}
 		memoResponse.setListContributions(list);
 		
+		
+		return memoResponse;
+	}
+
+	@Override
+	public DetailMemorials fetechById(Long id) {
+		DetailMemorials memoResponse = new DetailMemorials();
+		Memorials memorials = memorialsRepository.findById(id).get();
+		memoResponse.setId(memorials.getId());
+		memoResponse.setUrlImage(memorials.getAvatar());
+		memoResponse.setCauseOfDeath(memorials.getCauseOfDeath());
+		memoResponse.setFullName(memorials.getFullname());
+		memoResponse.setGender(memorials.getGender());
+		memoResponse.setBiography(memorials.getBiology());
+		memoResponse.setPrivacyType(memorials.getPrivacyType());
+		Placetimes placetimes = memorials.getPlacetime();
+		memoResponse.setLocation(placetimes.getLocation());
+		memoResponse.setNickName(placetimes.getNickName());
+		memoResponse.setBirthDate(placetimes.getBirthDate());
+		memoResponse.setDeathDate(placetimes.getDeathDate());
+		if(placetimes.getListImage() == null || placetimes.getListImage().isEmpty()) {
+			memoResponse.setUrlListImage(null);
+		}else {
+			memoResponse.setUrlListImage(placetimes.getListImage().split(";"));
+		}
 		
 		return memoResponse;
 	}
