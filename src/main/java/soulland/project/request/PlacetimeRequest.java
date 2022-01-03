@@ -1,8 +1,11 @@
 package soulland.project.request;
 
+import java.io.Serializable;
+
 import org.springframework.web.multipart.MultipartFile;
 
-public class PlacetimeRequest {
+@SuppressWarnings("serial")
+public class PlacetimeRequest implements Serializable{
 	
 	private Long idMemorials;
 	private String location;
