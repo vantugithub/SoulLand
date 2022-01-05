@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -57,7 +58,8 @@ public class AmazonClient {
     }
     
     private void uploadFileTos3bucket(String fileName, File file) {
-    	s3Client.putObject(new PutObjectRequest(bucketName, "site-logo/"+fileName, file));
+    	
+    	s3Client.putObject(new PutObjectRequest(bucketName, fileName, file).withCannedAcl(CannedAccessControlList.PublicRead));
     }
     
     public String uploadFile(MultipartFile multipartFile) {
@@ -76,7 +78,7 @@ public class AmazonClient {
             // Upload url of image to DB
             userService.updateImageProfile(fileName, username);
             
-            fileUrl = endpointUrl + "/site-logo/" + fileName;
+            fileUrl = endpointUrl + "/" + fileName;
             
             uploadFileTos3bucket(fileName, file);
             file.delete();
