@@ -71,7 +71,7 @@ public class ContributesServiceImpl implements ContributesService{
 			User user = contributions.getUserContributions();
 			UserContributionsResponse contributionsResponse = new UserContributionsResponse();
 			contributionsResponse.setContributiontype(contributions.getContributionType());
-			contributionsResponse.setFullName(user.getFirstName());
+			contributionsResponse.setFullName(user.getUsername());
 			if(contributions.getContributionType()==1) {
 				Flowers flowers = contributions.getFlower();
 				contributionsResponse.setObject(new FlowerResponse(flowers.getId(),flowers.getMessage(),flowers.getLastUpdatedDate()));
