@@ -10,7 +10,7 @@ import soulland.project.response.MemoHomeResponse;
 import soulland.project.response.PagedResponse;
 
 public interface MemorialsService {
-	public Memorials save(CreateMemorialForm memorials,String avatar);
+public Memorials save(CreateMemorialForm memorials,String avatar);
 	
 	public Optional<Memorials> findById(Long id);
 	

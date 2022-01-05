@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -53,8 +55,18 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+    	
+    	String[] staticResources  =  {
+    	        "/uploads/**",
+    	        "/images/**",
+    	        "/fonts/**",
+    	        "/scripts/**",
+    	    };
+    	
+    	
     	httpSecurity.cors()
     		.and()
             .csrf().disable()
@@ -64,7 +76,10 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/storage/**").permitAll()
             .antMatchers("/api/user/**").hasAnyRole("USER")
             .antMatchers("/api/memos/**").permitAll()
+            .antMatchers("/","/uploads/**", "/resources/**","/resources/uploads/**").permitAll()
+            
             .anyRequest().authenticated();
+    	
 
        httpSecurity
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -75,16 +90,21 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 //            .cacheControl(); //disable caching
     }
     
+    
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/v2/api-docs",
-            "/webjars/**"
+            "/webjars/**",
+            "/uploads/**"
     };
+    
+    
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(AUTH_WHITELIST);
+        
     }
     
     @SuppressWarnings("deprecation")
@@ -98,9 +118,19 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.allowedMethods("GET", "POST", "PUT", "DELETE")
 				.allowedHeaders("*");
             }
+            
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            	registry
+                .addResourceHandler("/resources/**")
+                .addResourceLocations("/resources/");	
+            }
+            
+            
         };
     }
-
-
+    
+    
+   
 }
 
