@@ -57,7 +57,7 @@ public class AmazonClient {
     }
     
     private void uploadFileTos3bucket(String fileName, File file) {
-    	s3Client.putObject(new PutObjectRequest(bucketName, fileName, file));
+    	s3Client.putObject(new PutObjectRequest(bucketName, "site-logo/"+fileName, file));
     }
     
     public String uploadFile(MultipartFile multipartFile) {
@@ -76,7 +76,7 @@ public class AmazonClient {
             // Upload url of image to DB
             userService.updateImageProfile(fileName, username);
             
-            fileUrl = endpointUrl + "/" + fileName;
+            fileUrl = endpointUrl + "/site-logo/" + fileName;
             
             uploadFileTos3bucket(fileName, file);
             file.delete();
