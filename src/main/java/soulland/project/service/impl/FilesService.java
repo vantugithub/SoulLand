@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class FilesService {
 	private final Path root = Paths.get("uploads");
 	
-	@SuppressWarnings("unused")
 	private String generateFileName(MultipartFile multiPart) {
         return new Date().getTime() + "_" + multiPart.getOriginalFilename().replace(" ", "_");
     }
